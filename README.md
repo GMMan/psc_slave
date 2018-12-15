@@ -1,46 +1,70 @@
-# psc_slave
+psc_slave Reloaded
+==================
 
->Disclaimer: this can brick your console. Don't use if you don't understand every piece of how it works.
+Based on [honeylab's work](https://bitbucket.org/bakueikozo/psc_slave)
 
-THIS IS INCOMPLETE OPEN.DO NOT USE WITHOUT YOU HAVE UART-CONSOLE OR YOU CAN FIX YOUR BRICK.
+This hack enables telnet access to your PlayStation Classic without permanently
+modifying the system.
 
-This uses lolhack, a payload launcher created by madmonkey.
+Prerequisite
+------------
+You need Android USB drivers installed and your OS must have support for RNDIS.
 
-This script will release console limitation and enable work as  RNDIS and ACM usb-device.
+Security Notice
+---------------
+Because anyone can sign a valid update package, please make sure that what you
+download is an original version. Otherwise, you may run malicious software that
+could damage the software on your console.
 
-And you have already used some lolhack script.
+A SHA-1 checksum will be provided for each release. To check the version of the
+release you downloaded, look inside the `diag` file inside the folder in the
+download package.
 
-DON'T USE if you are NOT expart for haking Playstation classic.
+Usage
+-----
+1. Download the latest version from the releases page.
+2. Format a USB drive as FAT32, volume label `SONY`
+3. Extract the contents of the release ZIP file to the root of the drive. That
+   means you should have the folder with the long string of characters in your
+   drive, and not just a .BIN file.
+4. Connect the console to your computer without it shutting down. You have a
+   couple of options:
+   -  Use a USB cable with a charge/data switch. Put the cable to charge mode,
+      then plug it into your console and computer. Wait for the yellow light to
+      come on. Then switch the cable to data mode. **Note: I don't recommend you
+      plug the console directly into your computer, as your computer may not
+      supply enough current and could become damaged from overcurrent.**
+   -  Use a powered USB hub. Make sure the hub is plugged into power and your
+      computer, then plug the console in. This somehow bypasses its check for
+      a computer host. If you leave the hub unplugged, the console will detect
+      it's not plugged into a regular power adapter and will shut down.
+5. Plug in your USB drive.
+6. Turn on the console.
+7. Wait for the hack to apply. You will see the light turn yellow for two seconds,
+   then back to green, and to yellow again. When the light turns back to green
+   the next time, the hack is complete, and you can either unplug the drive or
+   leave it in. The hack will not reapply itself again for the same boot (you
+   will see the light turn yellow for two seconds, but it will not turn yellow
+   again immediately after that).
+8. Depending on your operating system, you may need to set your IP address to
+   the `169.254.215.x` subnet.
+9. Using a telnet client, telnet to `169.254.215.100`. Login as `root`, no need
+   to enter password.
+10. (Optional) Shut down the `usbwatch` service. The service periodically polls
+    USB drives for diagnostics/update packages (such as this one), and will copy
+    it into internal memory. You don't want to wear your flash down unnecessarily,
+    so stop the service. Type this into the shell:
+    ```
+    systemctl stop usbwatch.service
+    ```
+    If you want to restart the service, type:
+    ```
+    systemctl start usbwatch.service
+    ```
 
-This script is tested only one console and by a Man.
+If you reboot the console, you will need to apply this hack again.
 
-
-# 1. Enable as usb device
-
-This script overwrite some stock files.
-Original files are included in this tree , but you must backup your eMMC filesystem.
-Place all files on 'slave' directory in labeled 'SONY' and clean USB stick.
-and use same as other lolhack scripts.
-
-** if you already conncted UART debug port , you can see progress in your teminal **
-** Use non-data USB cable or Simple USB Power plug. Clean Playstation classic will stop with data-USB cable or to USB-HOST system. **
-
-After power-cycle , you can connect USB-cable to your PC (recommend Linux).
-Some device will show up.
-You can adjust start_gadget.sh for your goal.
-Currentry RNDIS and ACM are tested.
-on Windows, you must install driver and you may adjust driver inf file.
-
-
-
-# 2. Disable as usb device (restore)
-
-Place all files on 'restore' directory in labeled 'SONY' and clean USB stick.
-and use same as other lolhack scripts.
-
-** if you already conncted UART debug port , you can see progress in your teminal **
-** after Disable(restore) , Playstation classic will not start with USB-HOST system . You can use only power adaptor **
-
-
-# Credits:
-madmonkey, DanTheMan827, skogaby , honeylab(bakueikozo)
+Credits
+-------
+As per the original project, madmonkey, DanTheMan827, skogaby, honeylab
+(bakueikozo)
