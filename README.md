@@ -44,11 +44,11 @@ you have a shell at your disposal).
       it's not plugged into a regular power adapter and will shut down.
 5. Plug in your USB drive.
 6. Turn on the console.
-7. Wait for the hack to apply. You will see the light turn yellow for two seconds,
+7. Wait for the hack to apply. You will see the light turn yellow for one second,
    then back to green, and to yellow again. When the light turns back to green
    the next time, the hack is complete, and you can either unplug the drive or
    leave it in. The hack will not reapply itself again for the same boot (you
-   will see the light turn yellow for two seconds, but it will not turn yellow
+   will see the light turn yellow for one second, but it will not turn yellow
    again immediately after that).
 8. Depending on your operating system, you may need to set your IP address to
    the `169.254.215.x` subnet.
