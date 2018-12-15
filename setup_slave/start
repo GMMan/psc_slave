@@ -1,0 +1,42 @@
+#!/bin/sh
+
+DEST_PATH=/tmp/psc_slave
+
+# DEBUG: Are we actually running this script?
+echo 1 > /sys/class/leds/red/brightness
+sleep 1
+echo 0 > /sys/class/leds/red/brightness
+sleep 1
+
+# Skip doing this if we've done this already
+if [ -d $DEST_PATH ]; then
+    exit
+fi
+
+# Light up LED to indicate we've started
+echo 1 > /sys/class/leds/red/brightness
+
+# Copy files out of the update pack
+mkdir -p $DEST_PATH
+cp busybox passwd $DEST_PATH
+chmod +x $DEST_PATH/busybox
+
+# Overmount /etc/passwd
+mount -o bind $DEST_PATH/passwd /etc/passwd
+
+# Enable gadget
+echo 0 > /sys/class/android_usb/android0/enable
+echo rndis,acm > /sys/class/android_usb/android0/functions
+echo tty > sys/class/android_usb/android0/f_acm/acm_transports
+echo 0 > /sys/class/android_usb/android0/bDeviceClass
+echo 1 > /sys/class/android_usb/android0/f_rndis/wceis
+echo 1 > /sys/class/android_usb/android0/f_acm/instances
+echo 1 > /sys/class/android_usb/android0/enable
+sleep 5
+
+# Config network and start telnet
+ifconfig rndis0 169.254.215.100 netmask 255.255.255.0
+$DEST_PATH/busybox telnetd &
+
+# Turn off LED to indicate we're done
+echo 0 > /sys/class/leds/red/brightness
