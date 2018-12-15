@@ -1,0 +1,7 @@
+[Unit]
+Description=Telnet Server
+After=local-fs.target
+
+[Service]
+ExecStart=-/tmp/psc_slave/busybox telnetd -i
+StandardInput=socket
