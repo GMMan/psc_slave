@@ -22,6 +22,10 @@ download package.
 
 Usage
 -----
+Please note that the console's package loader will only load one package. You
+cannot use this and lolhack at the same time (but you don't need to, since
+you have a shell at your disposal).
+
 1. Download the latest version from the releases page.
 2. Format a USB drive as FAT32, volume label `SONY`
 3. Extract the contents of the release ZIP file to the root of the drive. That
