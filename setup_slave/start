@@ -44,7 +44,7 @@ echo 1 > /sys/class/android_usb/android0/enable
 sleep 5
 
 # Config network and start telnet socket listening
-ifconfig rndis0 169.254.215.100 netmask 255.255.255.0
+ifconfig rndis0 169.254.215.100 netmask 255.255.0.0
 systemctl start telnet.socket
 
 # Turn off LED to indicate we're done
