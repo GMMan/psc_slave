@@ -1,0 +1,7 @@
+[Unit]
+Description=FTP Server
+After=local-fs.target
+
+[Service]
+ExecStart=-/tmp/psc_slave/busybox ftpd -w /
+StandardInput=socket

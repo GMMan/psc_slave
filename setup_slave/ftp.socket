@@ -1,0 +1,9 @@
+[Unit]
+Description=FTP Server Activation Socket
+
+[Socket]
+ListenStream=169.254.215.100:21
+Accept=true
+
+[Install]
+WantedBy=sockets.target
