@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ ! -f /tmp/custom_startup_done ]; then
+
+    # Remount /gaadata ro
+    mount -o remount,ro /gaadata
+
+    # Enable telnet
+    cd /data/sony/custom/setup_slave
+    ./psc_slave_internal.sh
+
+    # Enable FTP server
+    systemctl start ftp.socket
+
+    # Mark startup done
+    touch /tmp/custom_startup_done
+
+fi
+
+# Launch sonyapp
+cd /usr/sony/
+./bin/sonyapp >>/tmp/sonyapp.log 2>&1

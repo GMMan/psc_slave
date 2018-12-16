@@ -1,0 +1,40 @@
+#!/bin/sh
+
+DEST_PATH=/tmp/psc_slave
+
+# Light up LED to indicate we've started
+echo 1 > /sys/class/leds/red/brightness
+
+# Copy files out of the update pack
+mkdir -p $DEST_PATH
+cp busybox passwd $DEST_PATH
+chmod +x $DEST_PATH/busybox
+
+# Overmount /etc/passwd
+mount -o bind $DEST_PATH/passwd /etc/passwd
+
+# Copy /etc/systemd to temp location and overmount so we can add services
+cp -r /etc/systemd/ $DEST_PATH
+mount -o bind $DEST_PATH/systemd /etc/systemd
+
+# Add telnetd service
+cp telnet.socket telnet@.service ftp.socket ftp@.service /etc/systemd/system
+chmod 664 /etc/systemd/system/telnet.socket /etc/systemd/system/telnet@.service /etc/systemd/system/ftp.socket /etc/systemd/system/ftp@.service
+systemctl daemon-reload
+
+# Enable gadget
+echo 0 > /sys/class/android_usb/android0/enable
+echo rndis,acm > /sys/class/android_usb/android0/functions
+echo tty > sys/class/android_usb/android0/f_acm/acm_transports
+echo 0 > /sys/class/android_usb/android0/bDeviceClass
+echo 1 > /sys/class/android_usb/android0/f_rndis/wceis
+echo 1 > /sys/class/android_usb/android0/f_acm/instances
+echo 1 > /sys/class/android_usb/android0/enable
+sleep 5
+
+# Config network and start telnet socket listening
+ifconfig rndis0 169.254.215.100 netmask 255.255.0.0
+systemctl start telnet.socket
+
+# Turn off LED to indicate we're done
+echo 0 > /sys/class/leds/red/brightness
